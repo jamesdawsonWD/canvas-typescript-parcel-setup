@@ -3,13 +3,13 @@ import { Vector } from "../models/";
 export class Ball {
   private color: string;
   private radius: number;
+  private ctx: CanvasRenderingContext2D;
   private position: Vector;
-  private c: any;
-  constructor(position: Vector, radius: number, color: string, c: any) {
+  constructor(position: Vector, radius: number, color: string, ctx: CanvasRenderingContext2D) {
     this.color = color;
     this.radius = radius;
     this.position = position;
-    this.c = c;
+    this.ctx = ctx;
   }
   get getPosition() {
     return this.position;
@@ -24,7 +24,7 @@ export class Ball {
     return this.color;
   }
   public draw() {
-    this.c.arc(
+    this.ctx.arc(
       this.position.x,
       this.position.y,
       this.radius,
@@ -32,9 +32,9 @@ export class Ball {
       Math.PI * 2,
       false
     );
-    this.c.fillStyle = this.color;
-    this.c.fill();
-    this.c.closePath();
+    this.ctx.fillStyle = this.color;
+    this.ctx.fill();
+    this.ctx.closePath();
   }
   public update() {
     this.draw();

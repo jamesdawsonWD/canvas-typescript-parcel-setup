@@ -3,13 +3,19 @@ import { WeaponsMenu } from "./weaponsMenu";
 import { Ball } from "./ball";
 
 export class Canvas {
-  private c: any;
+  private ctx: CanvasRenderingContext2D;
   private mouse: Vector = { x: 0, y: 0 };
   private balls: Ball[];
 
-  private canvas: any;
+  private canvas: HTMLCanvasElement;
   private menu = false;
-  constructor(canvas: any) {
+
+  private Configs = {
+    steps: 3,
+    numOfParticles: 20,
+    lastStep: 0,
+};
+  constructor(canvas: HTMLCanvasElement) {
     window.requestAnimationFrame = (function() {
       return (
         window.requestAnimationFrame ||
@@ -21,17 +27,15 @@ export class Canvas {
     })();
 
     this.canvas = canvas;
+    this.canvas.width = innerWidth;
+    this.canvas.height = innerHeight;
+    this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
+    
     this.mouse = {
       x: innerWidth / 2,
       y: innerHeight / 2
     };
 
-    if (this.canvas) {
-      // grabs 2d context
-      this.c = this.canvas.getContext("2d");
-      this.canvas.width = innerWidth;
-      this.canvas.height = innerHeight;
-    }
     this.balls = [];
     // Event Listeners
     addEventListener("mousemove", event => {
@@ -44,7 +48,7 @@ export class Canvas {
     });
     addEventListener("click", event => {
       const position = { x: event.clientX, y: event.clientY };
-      this.balls.push(new Ball(position, 50, "#FF7F66", this.c));
+      this.balls.push(new Ball(position, 50, "#FF7F66", this.ctx));
     });
 
     addEventListener("resize", () => {
@@ -58,21 +62,32 @@ export class Canvas {
     this.init();
   }
   public init() {
-    this.animate();
+    this.animate(0);
+    
   }
-
-  public animate() {
-    window.requestAnimationFrame(this.animate.bind(this));
+  public drawBalls() {
+    // this.ctx.save();
+    // this.ctx.beginPath();
+    // this.ctx.translate(fireworks[i].origin.x, fireworks[i].origin.y);
+    // this.ctx.arc(0, 0, fireworks[i].radius, 0, 2 * Math.PI);
+    // this.ctx.fillStyle = fireworks[i].color;
+    // this.ctx.fill();
+    // this.ctx.restore();
+  }
+  public animate(milliseconds: any) {
+    const elapsed = milliseconds - this.Configs.lastStep;
+    this.Configs.lastStep = milliseconds;
     if (this.canvas) {
-      this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
-    this.c.fill();
-    for(let ball of this.balls) {
-      ball.update();
-    } 
+    this.ctx.fill();
+    for (let ball of this.balls) {
+      // ball.update();
+    }
     if (this.menu) {
-      const menu = new WeaponsMenu(this.mouse, 200, [], this.c);
+      const menu = new WeaponsMenu(this.mouse, 200, [], this.ctx);
       menu.update();
     }
+    window.requestAnimationFrame(this.animate.bind(this));
   }
 }
