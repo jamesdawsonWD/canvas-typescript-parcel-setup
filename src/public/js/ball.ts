@@ -1,21 +1,20 @@
-import { Vector } from "../models/";
+import { Vector, ToVector, distanceToAndAngle } from './vector';
 
 export class Ball {
-  private color: string;
-  private radius: number;
-  private ctx: CanvasRenderingContext2D;
-  private position: Vector;
-  constructor(position: Vector, radius: number, color: string, ctx: CanvasRenderingContext2D) {
-    this.color = color;
-    this.radius = radius;
-    this.position = position;
-    this.ctx = ctx;
+  constructor
+  (
+    private origin: Vector,
+    private destination: Vector,
+    private radius: number,
+    private color: string,
+    private ctx: CanvasRenderingContext2D
+  ) {}
+  
+  get getOrigin() {
+    return this.origin;
   }
-  get getPosition() {
-    return this.position;
-  }
-  public setPosition(v: Vector) {
-    this.position = v;
+  get getDestination() {
+    return this.destination;
   }
   get getRadius() {
     return this.radius;
@@ -23,10 +22,26 @@ export class Ball {
   get getColor() {
     return this.color;
   }
-  public draw() {
+  public setOrigin(v: Vector) {
+    this.origin = v;
+  }
+  public setDestination(v: Vector) {
+    this.destination = v;
+  }
+  public draw(milliseconds: number) {
+    const data = distanceToAndAngle(this.origin, this.destination);
+    const velocity = data.distance / 0.5;
+    const toMouseVector = new ToVector(velocity, data.angle);
+    const elapsedSeconds = milliseconds / 1000;
+
+    this.origin.x += toMouseVector.magnitudeX * elapsedSeconds;
+    this.origin.y += toMouseVector.magnitudeY * elapsedSeconds;
+    this.ctx.save();
+    this.ctx.beginPath();
+    this.ctx.translate(this.origin.x, this.origin.y);
     this.ctx.arc(
-      this.position.x,
-      this.position.y,
+      0,
+      0,
       this.radius,
       0,
       Math.PI * 2,
@@ -35,8 +50,10 @@ export class Ball {
     this.ctx.fillStyle = this.color;
     this.ctx.fill();
     this.ctx.closePath();
+    this.ctx.restore();
   }
-  public update() {
-    this.draw();
+  public update(elapsed: number) {
+    this.draw(elapsed);
   }
+
 }

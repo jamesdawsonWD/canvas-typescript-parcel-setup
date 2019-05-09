@@ -1,21 +1,19 @@
-import { Vector } from "../models";
+import { Vector, add } from "./vector";
 import { WeaponsMenu } from "./weaponsMenu";
 import { Ball } from "./ball";
 
 export class Canvas {
   private ctx: CanvasRenderingContext2D;
-  private mouse: Vector = { x: 0, y: 0 };
+  private mouse: Vector
   private balls: Ball[];
-
-  private canvas: HTMLCanvasElement;
   private menu = false;
 
   private Configs = {
     steps: 3,
     numOfParticles: 20,
     lastStep: 0,
-};
-  constructor(canvas: HTMLCanvasElement) {
+  };
+  constructor(private canvas: HTMLCanvasElement) {
     window.requestAnimationFrame = (function() {
       return (
         window.requestAnimationFrame ||
@@ -26,15 +24,11 @@ export class Canvas {
       );
     })();
 
-    this.canvas = canvas;
     this.canvas.width = innerWidth;
     this.canvas.height = innerHeight;
+
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
-    
-    this.mouse = {
-      x: innerWidth / 2,
-      y: innerHeight / 2
-    };
+    this.mouse = new Vector(innerWidth / 2, innerHeight / 2);
 
     this.balls = [];
     // Event Listeners
@@ -47,8 +41,9 @@ export class Canvas {
       this.menu = !this.menu;
     });
     addEventListener("click", event => {
-      const position = { x: event.clientX, y: event.clientY };
-      this.balls.push(new Ball(position, 50, "#FF7F66", this.ctx));
+      const position = new Vector(event.clientX, event.clientY);
+      const destination = add(position, new Vector(500, 500));
+      this.balls.push(new Ball(position, destination, 50, "#FF7F66", this.ctx));
     });
 
     addEventListener("resize", () => {
@@ -62,17 +57,7 @@ export class Canvas {
     this.init();
   }
   public init() {
-    this.animate(0);
-    
-  }
-  public drawBalls() {
-    // this.ctx.save();
-    // this.ctx.beginPath();
-    // this.ctx.translate(fireworks[i].origin.x, fireworks[i].origin.y);
-    // this.ctx.arc(0, 0, fireworks[i].radius, 0, 2 * Math.PI);
-    // this.ctx.fillStyle = fireworks[i].color;
-    // this.ctx.fill();
-    // this.ctx.restore();
+    window.requestAnimationFrame(this.animate.bind(this));
   }
   public animate(milliseconds: any) {
     const elapsed = milliseconds - this.Configs.lastStep;
@@ -82,7 +67,7 @@ export class Canvas {
     }
     this.ctx.fill();
     for (let ball of this.balls) {
-      // ball.update();
+      ball.update(elapsed);
     }
     if (this.menu) {
       const menu = new WeaponsMenu(this.mouse, 200, [], this.ctx);
