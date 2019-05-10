@@ -1,9 +1,10 @@
 import { Vector, ToVector, distanceToAndAngle } from './vector';
-
+import { inverseNumber } from './helpers';
 export class Ball {
   constructor
   (
     private origin: Vector,
+    private velocity: number,
     private destination: Vector,
     private radius: number,
     private color: string,
@@ -28,9 +29,12 @@ export class Ball {
   public setDestination(v: Vector) {
     this.destination = v;
   }
+  public setRadius(r: number) {
+    this.radius = r;
+  }
   public draw(milliseconds: number) {
     const data = distanceToAndAngle(this.origin, this.destination);
-    const velocity = data.distance / 0.5;
+    const velocity = data.distance / this.velocity;
     const toMouseVector = new ToVector(velocity, data.angle);
     const elapsedSeconds = milliseconds / 1000;
 
