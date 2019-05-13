@@ -2,8 +2,9 @@ import { Vector, add } from "./vector";
 import { WeaponsMenu } from "./weaponsMenu";
 import { Ball } from "./ball";
 import {
-  randomColorFromArray,
+  randomItemFromArray,
   randomIntFromRange,
+  HSLA
 } from "./helpers";
 export class Canvas {
   private ctx: CanvasRenderingContext2D;
@@ -13,9 +14,15 @@ export class Canvas {
 
   private Configs = {
     steps: 3,
-    numOfParticles: 10000,
+    numOfParticles: 10,
     lastStep: 0,
-    colors: ["#75DCFF", "#FFFC77", "#90FF84", "#FF6060", "#8B80F9"]
+    colors: [
+      new HSLA(195.2, 100, 72.9, 1), 
+      new HSLA(114.1, 100, 75.9, 1),  
+      new HSLA(245.5, 91, 73.9, 1),
+      new HSLA(58.7, 100, 73.3, 1),
+      new HSLA(0, 100, 68.8, 1), 
+    ]
   };
   constructor(private canvas: HTMLCanvasElement) {
     window.requestAnimationFrame = (function() {
@@ -39,21 +46,21 @@ export class Canvas {
     for (let i = 0; i < this.Configs.numOfParticles; i++) {
       const origins = [
         new Vector(
-          randomIntFromRange(-200, this.canvas.width + 200),
-          randomIntFromRange(0 - this.canvas.height, -200),
+          randomIntFromRange(0-this.canvas.width, 0-100),
+          randomIntFromRange(0-300, this.canvas.height+300)
         ),
         new Vector(
-          randomIntFromRange(-200, this.canvas.width + 200),
-          randomIntFromRange(this.canvas.height, this.canvas.height + this.canvas.height),
+          randomIntFromRange(this.canvas.width+100, this.canvas.width+ this.canvas.width),
+          randomIntFromRange(0-300, this.canvas.height+300)
         ),
         new Vector(
-          randomIntFromRange(0 - this.canvas.width, -200),
-          randomIntFromRange(0 -this.canvas.height, this.canvas.height + this.canvas.height),
+          randomIntFromRange(0-300, this.canvas.width+300),
+          randomIntFromRange(0-this.canvas.height, this.canvas.height-100)
         ),
         new Vector(
-          randomIntFromRange(this.canvas.width, this.canvas.width + this.canvas.width),
-          randomIntFromRange(0 - this.canvas.height, this.canvas.height + this.canvas.height),
-        ),
+          randomIntFromRange(0-300, this.canvas.width+300),
+          randomIntFromRange(this.canvas.height + 100, this.canvas.height + this.canvas.height)
+        )
       ];
       const dest = new Vector(
         randomIntFromRange(100, this.canvas.width - 100),
@@ -65,12 +72,11 @@ export class Canvas {
           randomIntFromRange(1, 1.3),
           dest,
           randomIntFromRange(1, 3),
-          randomColorFromArray(this.Configs.colors),
+          randomItemFromArray(this.Configs.colors),
           this.ctx
         )
       );
       j = j < 4 ? j++ : 0;
-      console.log(j);
     }
 
     // Event Listeners
@@ -79,11 +85,14 @@ export class Canvas {
       this.mouse.y = event.clientY;
       for (let ball of this.balls) {
         if (ball.getDestination.distanceTo(this.mouse) < 200) {
+
+          const color = ball.getOriginalColor as HSLA;
           const dest = new Vector(
             randomIntFromRange(100, this.canvas.width - 100),
             randomIntFromRange(100, this.canvas.height - 100),
           );
           ball.setDestination(dest);
+          color.increaseLight(1);
         }
       }
     });
@@ -93,7 +102,7 @@ export class Canvas {
     });
     addEventListener("click", event => {
       const position = new Vector(event.clientX, event.clientY);
-      const color = randomColorFromArray(this.Configs.colors);
+      const color = randomItemFromArray(this.Configs.colors);
 
       this.balls.push(
         new Ball(
@@ -114,7 +123,6 @@ export class Canvas {
       }
       this.init();
     });
-
     this.init();
   }
   public init() {
@@ -137,6 +145,7 @@ export class Canvas {
           randomIntFromRange(100, this.canvas.height - 100)
         );
         ball.setDestination(dest);
+
       }
       ball.update(elapsed);
     }

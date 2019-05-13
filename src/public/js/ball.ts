@@ -1,15 +1,18 @@
+import { HSLA } from './helpers';
 import { Vector, ToVector, distanceToAndAngle } from './vector';
-import { inverseNumber } from './helpers';
 export class Ball {
+  private tempColor: string;
   constructor
   (
     private origin: Vector,
     private velocity: number,
     private destination: Vector,
     private radius: number,
-    private color: string,
+    private originalColor: HSLA,
     private ctx: CanvasRenderingContext2D
-  ) {}
+  ) {
+    this.tempColor = this.originalColor.toString();
+  }
   
   get getOrigin() {
     return this.origin;
@@ -20,8 +23,14 @@ export class Ball {
   get getRadius() {
     return this.radius;
   }
-  get getColor() {
-    return this.color;
+  get getOriginalColor(): HSLA {
+    return this.originalColor;
+  }
+  get getTempColor(): string {
+    return this.tempColor;
+  }
+  public setTempColor(color: string) {
+    this.tempColor = color;
   }
   public setOrigin(v: Vector) {
     this.origin = v;
@@ -51,7 +60,7 @@ export class Ball {
       Math.PI * 2,
       false
     );
-    this.ctx.fillStyle = this.color;
+    this.ctx.fillStyle = this.tempColor;
     this.ctx.fill();
     this.ctx.closePath();
     this.ctx.restore();
