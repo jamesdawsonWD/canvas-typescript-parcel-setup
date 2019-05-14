@@ -14,7 +14,7 @@ export class Canvas {
 
   private Configs = {
     steps: 3,
-    numOfParticles: 10,
+    numOfParticles: 3000,
     lastStep: 0,
     colors: [
       new HSLA(195.2, 100, 72.9, 1), 
@@ -106,7 +106,7 @@ export class Canvas {
 
       this.balls.push(
         new Ball(
-          new Vector(-200, -200),
+          position,
           randomIntFromRange(1, 6),
           position,
           randomIntFromRange(1, 35),
@@ -140,11 +140,11 @@ export class Canvas {
         Math.ceil(ball.getOrigin.x) + 1 > ball.getDestination.x &&
         Math.ceil(ball.getOrigin.y) + 1 > ball.getDestination.y
       ) {
-        const dest = new Vector(
-          randomIntFromRange(100, this.canvas.width - 100),
-          randomIntFromRange(100, this.canvas.height - 100)
-        );
-        ball.setDestination(dest);
+        // const dest = new Vector(
+        //   randomIntFromRange(100, this.canvas.width - 100),
+        //   randomIntFromRange(100, this.canvas.height - 100)
+        // );
+        // ball.setDestination(dest);
 
       }
       ball.update(elapsed);
