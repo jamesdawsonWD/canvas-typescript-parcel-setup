@@ -14,7 +14,7 @@ export class Canvas {
 
   private Configs = {
     steps: 3,
-    numOfParticles: 3000,
+    numOfParticles: 2000,
     lastStep: 0,
     colors: [
       new HSLA(195.2, 100, 72.9, 1), 
