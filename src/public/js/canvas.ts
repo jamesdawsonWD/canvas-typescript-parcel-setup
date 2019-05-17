@@ -136,17 +136,11 @@ export class Canvas {
     }
     this.ctx.fill();
     for (let ball of this.balls) {
-      if (
-        Math.ceil(ball.getOrigin.x) + 1 > ball.getDestination.x &&
-        Math.ceil(ball.getOrigin.y) + 1 > ball.getDestination.y
-      ) {
-        // const dest = new Vector(
-        //   randomIntFromRange(100, this.canvas.width - 100),
-        //   randomIntFromRange(100, this.canvas.height - 100)
-        // );
-        // ball.setDestination(dest);
-
-      }
+      
+      const center = new Vector(this.canvas.width/2, this.canvas.height/2);
+      const distance = ball.getOrigin.distanceTo(center) > 300 ? 10 : ball.getOrigin.distanceTo(center);
+      ball.setRadius(5 * distance/100);
+      
       ball.update(elapsed);
     }
     if (this.menu) {
