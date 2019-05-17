@@ -1,6 +1,7 @@
 import { Vector, add } from "./vector";
 import { WeaponsMenu } from "./weaponsMenu";
-import { Ball } from "./ball";
+import { Star } from "./star";
+import { Pulse } from "./pulse";
 import {
   randomItemFromArray,
   randomIntFromRange,
@@ -9,7 +10,8 @@ import {
 export class Canvas {
   private ctx: CanvasRenderingContext2D;
   private mouse: Vector;
-  private balls: Ball[];
+  private balls: Star[];
+  private pulses: Pulse[]
   private menu = false;
 
   private Configs = {
@@ -42,6 +44,8 @@ export class Canvas {
     this.mouse = new Vector(innerWidth / 2, innerHeight / 2);
 
     this.balls = [];
+    this.pulses = [];
+
     let j = 0;
     for (let i = 0; i < this.Configs.numOfParticles; i++) {
       const origins = [
@@ -67,7 +71,7 @@ export class Canvas {
         randomIntFromRange(100, this.canvas.height - 100)
       );
       this.balls.push(
-        new Ball(
+        new Star(
           origins[j],
           randomIntFromRange(1, 1.3),
           dest,
@@ -104,8 +108,8 @@ export class Canvas {
       const position = new Vector(event.clientX, event.clientY);
       const color = randomItemFromArray(this.Configs.colors);
 
-      this.balls.push(
-        new Ball(
+      this.pulses.push(
+        new Pulse(
           position,
           randomIntFromRange(1, 6),
           position,
@@ -135,6 +139,9 @@ export class Canvas {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
     this.ctx.fill();
+    for (let pulse of this.pulses) {
+      pulse.update(elapsed);
+    }
     for (let ball of this.balls) {
       if (
         Math.ceil(ball.getOrigin.x) + 1 > ball.getDestination.x &&
