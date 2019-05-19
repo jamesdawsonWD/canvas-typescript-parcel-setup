@@ -1,7 +1,7 @@
 import { HSLA } from '../helpers';
 import { Ball } from "./ball";
 
-import { Vector, ToVector, distanceToAndAngle } from './vector';
+import { Vector, ToVector, distanceToAndAngle } from '../vector';
 export class Star extends Ball{
   private tempColor: string;
   constructor

@@ -7,7 +7,7 @@ import {
   randomIntFromRange,
   HSLA
 } from "../helpers";
-export class Canvas {
+export class StyledMenu {
   private ctx: CanvasRenderingContext2D;
   private mouse: Vector;
   private balls: Star[];
@@ -47,6 +47,8 @@ export class Canvas {
     this.pulses = [];
 
     let j = 0;
+
+    // creates the particles from the amount set by config in random locations
     for (let i = 0; i < this.Configs.numOfParticles; i++) {
       const origins = [
         new Vector(
@@ -89,7 +91,6 @@ export class Canvas {
       this.mouse.y = event.clientY;
       for (let ball of this.balls) {
         if (ball.getDestination.distanceTo(this.mouse) < 200) {
-
           const color = ball.getOriginalColor as HSLA;
           const dest = new Vector(
             randomIntFromRange(100, this.canvas.width - 100),
@@ -108,6 +109,7 @@ export class Canvas {
       const position = new Vector(event.clientX, event.clientY);
       const color = randomItemFromArray(this.Configs.colors);
 
+      // adds a new pulse on click
       this.pulses.push(
         new Pulse(
           position,
@@ -138,15 +140,14 @@ export class Canvas {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
     this.ctx.fill();
+
     for (let pulse of this.pulses) {
       pulse.update(elapsed);
     }
     for (let ball of this.balls) {
-      
       const center = new Vector(this.canvas.width/2, this.canvas.height/2);
       const distance = ball.getOrigin.distanceTo(center) > 300 ? 10 : ball.getOrigin.distanceTo(center);
       ball.setRadius(5 * distance/100);
-      
       ball.update(elapsed);
     }
     if (this.menu) {

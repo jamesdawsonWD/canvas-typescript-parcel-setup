@@ -1,4 +1,4 @@
-import { Vector } from "./vector";
+import { Vector } from "../vector";
 import { HSLA } from "../helpers";
 
 export class Ball {

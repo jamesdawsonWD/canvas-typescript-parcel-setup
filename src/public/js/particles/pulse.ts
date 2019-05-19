@@ -1,7 +1,7 @@
 import { HSLA } from '../helpers';
 import { Ball } from "./ball";
 
-import { Vector, ToVector, distanceToAndAngle } from './vector';
+import { Vector, ToVector, distanceToAndAngle } from '../vector';
 export class Pulse extends Ball{
   private tempColor: string;
   constructor
@@ -17,21 +17,25 @@ export class Pulse extends Ball{
     this.tempColor = this.originalColor.toString();
   }
 
-  public draw(milliseconds: number) {
-    // const data = distanceToAndAngle(this.origin, this.destination);
-    // const velocity = data.distance / this.velocity;
-    // const toMouseVector = new ToVector(velocity, data.angle);
-    // const elapsedSeconds = milliseconds / 1000;
+  public setDestination(v: Vector) {
+    this.destination = v;
+  }
 
-    // this.origin.x += toMouseVector.magnitudeX * elapsedSeconds;
-    // this.origin.y += toMouseVector.magnitudeY * elapsedSeconds;
+  public draw(milliseconds: number) {
+    const data = distanceToAndAngle(this.origin, this.destination);
+    const velocity = data.distance / 5;
+    const toMouseVector = new ToVector(velocity, data.angle);
+    const elapsedSeconds = milliseconds / 1000;
+
+    this.origin.x += toMouseVector.magnitudeX * elapsedSeconds;
+    this.origin.y += toMouseVector.magnitudeY * elapsedSeconds;
     this.ctx.save();
     this.ctx.beginPath();
     this.ctx.translate(this.origin.x, this.origin.y);
     this.ctx.arc(
       0,
       0,
-      this.size,
+      this.getRadius,
       0,
       Math.PI * 2,
       false
