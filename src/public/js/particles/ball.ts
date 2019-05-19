@@ -1,5 +1,5 @@
 import { Vector } from "./vector";
-import { HSLA } from "./helpers";
+import { HSLA } from "../helpers";
 
 export class Ball {
   constructor(

@@ -1,4 +1,4 @@
-import { Vector } from "../models/";
+import { Vector } from "../../models";
 
 export class WeaponsMenu {
     private weapons: string[];

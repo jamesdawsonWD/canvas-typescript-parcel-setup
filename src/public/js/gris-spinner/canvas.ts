@@ -6,7 +6,7 @@ import {
   randomItemFromArray,
   randomIntFromRange,
   HSLA
-} from "./helpers";
+} from "../helpers";
 export class Canvas {
   private ctx: CanvasRenderingContext2D;
   private mouse: Vector;
@@ -19,11 +19,11 @@ export class Canvas {
     numOfParticles: 2000,
     lastStep: 0,
     colors: [
-      new HSLA(195.2, 100, 72.9, 1), 
-      new HSLA(114.1, 100, 75.9, 1),  
-      new HSLA(245.5, 91, 73.9, 1),
-      new HSLA(58.7, 100, 73.3, 1),
-      new HSLA(0, 100, 68.8, 1), 
+      new HSLA(164, 23, 45, 1), 
+      new HSLA(50, 78, 76, 1),  
+      new HSLA(28, 83, 70, 1),
+      new HSLA(5, 63, 60, 1),
+      new HSLA(0, 33, 41, 1), 
     ]
   };
   constructor(private canvas: HTMLCanvasElement) {
@@ -125,7 +125,6 @@ export class Canvas {
         this.canvas.width = innerWidth;
         this.canvas.height = innerHeight;
       }
-      this.init();
     });
     this.init();
   }

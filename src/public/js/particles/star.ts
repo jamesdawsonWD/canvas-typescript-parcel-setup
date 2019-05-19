@@ -1,8 +1,8 @@
-import { HSLA } from './helpers';
+import { HSLA } from '../helpers';
 import { Ball } from "./ball";
 
 import { Vector, ToVector, distanceToAndAngle } from './vector';
-export class Pulse extends Ball{
+export class Star extends Ball{
   private tempColor: string;
   constructor
   (
@@ -17,14 +17,29 @@ export class Pulse extends Ball{
     this.tempColor = this.originalColor.toString();
   }
 
-  public draw(milliseconds: number) {
-    // const data = distanceToAndAngle(this.origin, this.destination);
-    // const velocity = data.distance / this.velocity;
-    // const toMouseVector = new ToVector(velocity, data.angle);
-    // const elapsedSeconds = milliseconds / 1000;
+  get getDestination() {
+    return this.destination;
+  }
 
-    // this.origin.x += toMouseVector.magnitudeX * elapsedSeconds;
-    // this.origin.y += toMouseVector.magnitudeY * elapsedSeconds;
+  get getTempColor(): string {
+    return this.tempColor;
+  }
+  public setTempColor(color: string) {
+    this.tempColor = color;
+  }
+
+  public setDestination(v: Vector) {
+    this.destination = v;
+  }
+
+  public draw(milliseconds: number) {
+    const data = distanceToAndAngle(this.origin, this.destination);
+    const velocity = data.distance / this.velocity;
+    const toMouseVector = new ToVector(velocity, data.angle);
+    const elapsedSeconds = milliseconds / 1000;
+
+    this.origin.x += toMouseVector.magnitudeX * elapsedSeconds;
+    this.origin.y += toMouseVector.magnitudeY * elapsedSeconds;
     this.ctx.save();
     this.ctx.beginPath();
     this.ctx.translate(this.origin.x, this.origin.y);
@@ -44,4 +59,5 @@ export class Pulse extends Ball{
   public update(elapsed: number) {
     this.draw(elapsed);
   }
+
 }
