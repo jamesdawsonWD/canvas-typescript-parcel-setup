@@ -6,6 +6,7 @@
     "outDir": "./lib/",
     "target": "es5",
     "sourceMap": true,
+    "downlevelIteration": true,
     "declaration": true,
     "jsx": "preserve",
     "lib": [
@@ -16,7 +17,15 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": "src",
+    "paths": {
+      "@app/*": ["app/*"],
+      "@assets/*": ["public/assets/*"],
+      "@modules/*": ["public/js/modules/*"],
+      "@classes/*": ["public/js/classes/*"],
+      "@helpers/*": ["public/js/helpers/*"]
+  },
   },
   "include": [
     "src/**/*"
@@ -24,5 +33,6 @@
   "exclude": [
     ".git",
     "node_modules"
-  ]
+  ],
+
 }

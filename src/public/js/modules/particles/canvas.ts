@@ -1,29 +1,27 @@
-import { Vector, add } from "./vector";
-import { WeaponsMenu } from "./weaponsMenu";
+import { Vector, add } from '@helpers/vector';
 import { Star } from "./star";
 import { Pulse } from "./pulse";
 import {
   randomItemFromArray,
   randomIntFromRange,
   HSLA
-} from "../helpers";
-export class StyledMenu {
+} from "../../helpers";
+export class Canvas {
   private ctx: CanvasRenderingContext2D;
   private mouse: Vector;
   private balls: Star[];
   private pulses: Pulse[]
   private menu = false;
-
   private Configs = {
     steps: 3,
     numOfParticles: 2000,
     lastStep: 0,
     colors: [
-      new HSLA(164, 23, 45, 1), 
-      new HSLA(50, 78, 76, 1),  
+      new HSLA(164, 23, 45, 1),
+      new HSLA(50, 78, 76, 1),
       new HSLA(28, 83, 70, 1),
       new HSLA(5, 63, 60, 1),
-      new HSLA(0, 33, 41, 1), 
+      new HSLA(0, 33, 41, 1),
     ]
   };
   constructor(private canvas: HTMLCanvasElement) {
@@ -91,13 +89,11 @@ export class StyledMenu {
       this.mouse.y = event.clientY;
       for (let ball of this.balls) {
         if (ball.getDestination.distanceTo(this.mouse) < 200) {
-          const color = ball.getOriginalColor as HSLA;
           const dest = new Vector(
             randomIntFromRange(100, this.canvas.width - 100),
             randomIntFromRange(100, this.canvas.height - 100),
           );
           ball.setDestination(dest);
-          color.increaseLight(1);
         }
       }
     });
@@ -121,7 +117,26 @@ export class StyledMenu {
         )
       );
     });
-
+    window.addEventListener('wheel', event => {
+      if (event.deltaY < 0) {
+          this.Configs.colors = [
+            new HSLA(0, 23, 45, 1), 
+            new HSLA(5, 78, 76, 1),  
+            new HSLA(228, 83, 70, 1),
+            new HSLA(50, 63, 60, 1),
+            new HSLA(164, 33, 41, 1), 
+          ]
+      }
+      if (event.deltaY > 0) {
+        this.Configs.colors =  [
+          new HSLA(164, 23, 45, 1), 
+          new HSLA(50, 78, 76, 1),  
+          new HSLA(28, 83, 70, 1),
+          new HSLA(5, 63, 60, 1),
+          new HSLA(0, 33, 41, 1), 
+        ]
+      }
+    });
     addEventListener("resize", () => {
       if (this.canvas) {
         this.canvas.width = innerWidth;
@@ -135,24 +150,30 @@ export class StyledMenu {
   }
   public animate(milliseconds: any) {
     const elapsed = milliseconds - this.Configs.lastStep;
+    const center = new Vector(this.canvas.width/2, this.canvas.height/2);
     this.Configs.lastStep = milliseconds;
     if (this.canvas) {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
     this.ctx.fill();
 
-    for (let pulse of this.pulses) {
+    for (let [i, pulse] of this.pulses.entries()) {
+      if(pulse.getOrigin.distanceTo(center) > 30) {
+        pulse.setDestination(center);
+      } else {
+        if(pulse.getRadius < this.canvas.width * 0.7) {
+          pulse.setRadius(pulse.getRadius + 1);
+        } else {
+          this.pulses.splice(i, 1);
+        }
+      }
       pulse.update(elapsed);
     }
     for (let ball of this.balls) {
-      const center = new Vector(this.canvas.width/2, this.canvas.height/2);
+
       const distance = ball.getOrigin.distanceTo(center) > 300 ? 10 : ball.getOrigin.distanceTo(center);
       ball.setRadius(5 * distance/100);
       ball.update(elapsed);
-    }
-    if (this.menu) {
-      const menu = new WeaponsMenu(this.mouse, 200, [], this.ctx);
-      menu.update();
     }
     window.requestAnimationFrame(this.animate.bind(this));
   }

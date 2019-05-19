@@ -1,11 +1,12 @@
-import { Vector } from "../vector";
+import { Vector } from "../helpers/vector";
 import { HSLA } from "../helpers";
 
-export class Ball {
+export class Circle {
   constructor(
     private position: Vector,
     private radius: number,
     private color: HSLA,
+    private stroke: number
   ) {}
   get getOriginalColor(): HSLA {
     return this.color;

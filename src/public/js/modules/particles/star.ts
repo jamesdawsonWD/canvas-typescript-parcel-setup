@@ -1,8 +1,8 @@
-import { HSLA } from '../helpers';
-import { Ball } from "./ball";
+import { HSLA } from '@helpers/index.ts';
+import { Circle } from "@classes/circle";
 
-import { Vector, ToVector, distanceToAndAngle } from '../vector';
-export class Pulse extends Ball{
+import { Vector, ToVector, distanceToAndAngle } from '../../helpers/vector';
+export class Star extends Circle{
   private tempColor: string;
   constructor
   (
@@ -10,11 +10,23 @@ export class Pulse extends Ball{
     private velocity: number,
     private destination: Vector,
     private size: number,
+    private border: number,
     private originalColor: HSLA,
     private ctx: CanvasRenderingContext2D,
   ) {
-    super(origin, size, originalColor);
+    super(origin, size, originalColor, border);
     this.tempColor = this.originalColor.toString();
+  }
+
+  get getDestination() {
+    return this.destination;
+  }
+
+  get getTempColor(): string {
+    return this.tempColor;
+  }
+  public setTempColor(color: string) {
+    this.tempColor = color;
   }
 
   public setDestination(v: Vector) {
@@ -23,7 +35,7 @@ export class Pulse extends Ball{
 
   public draw(milliseconds: number) {
     const data = distanceToAndAngle(this.origin, this.destination);
-    const velocity = data.distance / 5;
+    const velocity = data.distance / this.velocity;
     const toMouseVector = new ToVector(velocity, data.angle);
     const elapsedSeconds = milliseconds / 1000;
 
@@ -35,7 +47,7 @@ export class Pulse extends Ball{
     this.ctx.arc(
       0,
       0,
-      this.getRadius,
+      this.size,
       0,
       Math.PI * 2,
       false
@@ -48,4 +60,5 @@ export class Pulse extends Ball{
   public update(elapsed: number) {
     this.draw(elapsed);
   }
+
 }
