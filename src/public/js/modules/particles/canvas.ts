@@ -1,11 +1,11 @@
-import { Vector, add } from '@helpers/vector';
+import { Vector, add } from '~/helpers/vector';
 import { Star } from "./star";
 import { Pulse } from "./pulse";
 import {
   randomItemFromArray,
   randomIntFromRange,
   HSLA
-} from "../../helpers";
+} from "~/helpers/index.ts";
 export class Canvas {
   private ctx: CanvasRenderingContext2D;
   private mouse: Vector;
