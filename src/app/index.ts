@@ -1,6 +1,6 @@
 import '../sass/app.scss';
 // import {Canvas} from '../public/js/particles/canvas';
-import { StyledMenu } from '../public/js/modules/styled-menu/canvas'
+import { StyledMenu } from '../public/js/modules/spiral/canvas'
 import '../public/assets/mountain-cave.svg';
 
 // function importHTML(filename: string){

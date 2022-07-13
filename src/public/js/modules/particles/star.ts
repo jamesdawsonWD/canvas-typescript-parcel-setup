@@ -1,5 +1,5 @@
-import { HSLA } from '@helpers/index.ts';
-import { Circle } from "@classes/circle";
+import { HSLA } from '../../helpers/index';
+import { Circle } from "../../classes/circle";
 
 import { Vector, ToVector, distanceToAndAngle } from '../../helpers/vector';
 export class Star extends Circle{
@@ -12,9 +12,10 @@ export class Star extends Circle{
     private size: number,
     private border: number,
     private originalColor: HSLA,
+    private strokeColorStar: HSLA,
     private ctx: CanvasRenderingContext2D,
   ) {
-    super(origin, size, originalColor, border);
+    super(origin, size, originalColor, border, strokeColorStar);
     this.tempColor = this.originalColor.toString();
   }
 

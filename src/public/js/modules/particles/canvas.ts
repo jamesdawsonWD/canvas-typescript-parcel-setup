@@ -5,7 +5,7 @@ import {
   randomItemFromArray,
   randomIntFromRange,
   HSLA
-} from "~/helpers/index.ts";
+} from "../..//helpers";
 export class Canvas {
   private ctx: CanvasRenderingContext2D;
   private mouse: Vector;
@@ -28,7 +28,6 @@ export class Canvas {
     window.requestAnimationFrame = (function() {
       return (
         window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
         function(callback) {
           window.setTimeout(callback, 1000 / 60);
         }
@@ -76,6 +75,8 @@ export class Canvas {
           randomIntFromRange(1, 1.3),
           dest,
           randomIntFromRange(1, 3),
+          randomIntFromRange(1, 3),
+          randomItemFromArray(this.Configs.colors),
           randomItemFromArray(this.Configs.colors),
           this.ctx
         )
@@ -112,6 +113,8 @@ export class Canvas {
           randomIntFromRange(1, 6),
           position,
           randomIntFromRange(1, 35),
+          randomIntFromRange(1, 35),
+          color,
           color,
           this.ctx
         )

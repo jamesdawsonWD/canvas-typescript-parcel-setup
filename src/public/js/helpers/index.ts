@@ -1,4 +1,5 @@
 export const randomIntFromRange = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1) + min);
+export const randomFloatFromRange = (min: number, max: number): number => Math.random() * (max-min) + min;
 export const randomItemFromArray = (items: any[]): any => items[Math.floor(Math.random() * items.length)];
 export const inverseNumber = (i: number, max: number): number => max - i
 

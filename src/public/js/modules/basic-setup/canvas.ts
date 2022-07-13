@@ -1,10 +1,10 @@
-import { Vector, add } from "@helpers/vector";
+import { Vector, add } from "../../helpers/vector";
 
 import {
   randomItemFromArray,
   randomIntFromRange,
   HSLA
-} from "@helpers/index.ts";
+} from "../../helpers/index";
 export class StyledMenu {
   private ctx: CanvasRenderingContext2D;
   private mouse: Vector;
